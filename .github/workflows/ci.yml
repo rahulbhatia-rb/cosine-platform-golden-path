@@ -1,0 +1,17 @@
+name: platform-ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test-and-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+      - run: go test ./...
+      - run: go vet ./...
+      - run: go run ./cmd/platformctl -contract examples/agent-api-prod.json
